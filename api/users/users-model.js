@@ -20,7 +20,7 @@ function find() {
    */
 
   return db("users as u")
-    .join("roles as r")
+    .join("roles as r", "u.role_id", "r.role_id")
     .select("u.user_id", "u.username", "r.role_name");
 }
 
@@ -38,12 +38,12 @@ async function findBy(filter) {
       }
     ]
    */
-  const info = await db("users as u")
-    .join("roles as r")
+  const user = await db("users as u")
+    .join("roles as r", "u.role_id", "r.role_id")
     .where(filter)
     .select("u.user_id", "u.username", "u.password", "r.role_name");
 
-  return info;
+  return user;
 }
 
 async function findById(user_id) {
@@ -58,9 +58,10 @@ async function findById(user_id) {
     }
    */
   const user = await db("users as u")
-    .join("roles as r")
+    .join("roles as r", "u.role_id", "r.role_id")
+    .select("u.user_id", "u.username", "r.role_name")
     .where("u.user_id", user_id)
-    .select("u.user_id", "u.username", "r.role_name");
+    .first();
 
   return user;
 }
